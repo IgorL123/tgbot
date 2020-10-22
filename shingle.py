@@ -8,7 +8,10 @@ def canonize(sourse):
     words = nltk.word_tokenize(sourse)
     without_stop_words = [word for word in words if not word in stop_words]
     n = [stemmer.stem(w).lower() for w in without_stop_words if len(w) > 1 and w.isalpha()]
-    return n
+    s = ''
+    for i in range(len(n)):
+        s += str(n[i]) + ' '
+    return s
 
 def genshingle(source):
     import binascii
@@ -35,8 +38,6 @@ def main():
     text3 = u'Друзья, про классных российских креативщиков поговорили, расскажите теперь про крутых российских бренд-менеджеров? Кто сейчас строит лучшие бренды? Кто покупает и производит самые креативные кампании? Кто каждый раз безошибочно выбирает лучшую идею из трех и не дает своим коллегам убить ее комментариями? '
     cmp1 = genshingle(canonize(text1))
     cmp2 = genshingle(canonize(text2))
-    print(cmp1)
-    print(cmp2)
     c1 =(canonize(text1))
     c2 = (canonize(text2))
     print(compaire(cmp1, cmp2))
