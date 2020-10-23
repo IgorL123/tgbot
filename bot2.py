@@ -28,6 +28,12 @@ u_choice = {
 }
 
 
+def get_to_database():
+    import psycopg2
+    con = psycopg2.connect(database="postgres", user="postgres", password="abcd0987", host="127.0.0.1", port="5433")
+    cur = con.cursor()
+    return cur
+
 def shingle_posts():
     pass
 
@@ -46,6 +52,50 @@ def send_posts():
     pass
 
 
+def get_channels(amount_top, amount_bottom):
+    from datetime import datetime
+    now = datetime.today().day
+    import psycopg2
+    con = psycopg2.connect(database="postgres", user="postgres", password="abcd0987", host="127.0.0.1", port="5433")
+    cur = con.cursor()
+    cur.execute("SELECT date,num_bottom from LASTDATE1")
+    rows = cur.fetchall()
+    num_of_bottom = rows[0][1]
+    if num_of_bottom == 16:
+        num_of_bottom = 1
+    cur.execute("""TRUNCATE LASTDATE1""")
+    if rows[0][0] != now:
+        insert = "INSERT INTO LASTDATE1 (DATE,NUM_BOTTOM) VALUES (%s,%s)"
+        cur.execute(insert, (now, num_of_bottom+1))
+        return sort_channels(amount_top, amount_bottom,)
+    con.commit()
+    con.close()
+
+
+def sort_channels(amount_top, amount_bottom, number_of_bottom):
+    import psycopg2
+    con = psycopg2.connect(database="postgres", user="postgres", password="abcd0987", host="127.0.0.1", port="5433")
+    cur = con.cursor()
+    cur.execute("SELECT id,name,count_subs from TGDATAEXTRA")
+    rows = cur.fetchall()
+    rows = sorted(rows, key=lambda subs: subs[2], reverse=True)
+    ch_top = []
+    ch_bottom = []
+
+    for i in range(len(rows)):
+        border1 = amount_top + amount_bottom * (number_of_bottom - 1)
+        border2 = amount_top + amount_bottom * number_of_bottom
+        if border2 > len(rows) - 1:
+            border2 = len(rows) - 1
+        if border1 <= i < border2:
+            ch_bottom.append(rows[i][1])
+        if i < amount_top:
+            ch_top.append(rows[i][1])
+
+    con.commit()
+    con.close()
+    return ch_top, ch_bottom
+
 def get_user_choice(sender):
     import psycopg2
     con = psycopg2.connect(database="postgres", user="postgres", password="abcd0987", host="127.0.0.1", port="5433")
@@ -58,6 +108,8 @@ def get_user_choice(sender):
         u_choice['education'] = row[4]
         u_choice['art'] = row[5]
         u_choice['sport'] = row[6]
+    con.commit()
+    con.close()
 
 
 def is_user_new(sender):
