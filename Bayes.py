@@ -40,9 +40,6 @@ class NaiveBayesModel(object):
             list of (class label, weight) tuples
         """
 
-        # with open(input_path, "r", encoding='utf8') as input_file:
-        # doc_tokens = util.tokenize(util.get_text(input_file))
-
         doc_tokens = util.tokenize(input_text.lower())
 
         weights = self.doc_in_class_probabilities(
@@ -102,7 +99,7 @@ def train(input_paths, output_path):
         pickle.dump(model, output_file)
 
 
-def classify(input_texts, model_path):
+def classify_texts(input_texts, model_path):
     with open(model_path, "rb") as model_file:
         model = pickle.load(model_file)
 
@@ -116,13 +113,9 @@ def classify(input_texts, model_path):
         ))
 
 
-def classifyone(input_text, model_path):
+def classify_one(input_text, model_path):
     with open(model_path, "rb") as model_file:
         model = pickle.load(model_file)
-    best_label, weights = model.classify(input_text)
+    best_label, weights = model.classify(input_text=input_text)
 
     return best_label, weights
-
-
-if __name__ == "__main__":
-    pass
