@@ -1,1 +1,1 @@
-run: python mirror.py
+run: python bot2.py
