@@ -1,3 +1,4 @@
+
 import re
 import string
 import nltk
@@ -19,4 +20,3 @@ def tokenize(text):
     return [word for
             word in words
             if not re.search(punctuation, word)]
-
