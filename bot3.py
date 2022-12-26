@@ -3,10 +3,6 @@ from telethon.sync import TelegramClient, events
 import psycopg2
 #from config import (API_HASH, API_ID, SOURCE_CHANNEL, SESSION_STRING,TARGET_CHANNEL)
 
-api_id = 1999880
-api_hash = '0e8b4dc0b4c5fc7ef1d90471f9023e7d'
-bot_token = '1309287396:AAHJfPD6n0JMYlBUufz1gEVd9u5MjGv6C8k'
-username = 'redneck88'
 
 
 def get_channels(amount_top=150, amount_bottom=30):
